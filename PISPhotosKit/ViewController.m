@@ -56,34 +56,27 @@
 
 - (void)submitAction
 {
-    PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
-    if (status == PHAuthorizationStatusAuthorized)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            PISPickerViewController *vc = [[PISPickerViewController alloc] init];
-            
-            [self presentViewController:vc animated:YES completion:^{
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+        if (status == PHAuthorizationStatusAuthorized) {
+            //code
+            dispatch_async(dispatch_get_main_queue(), ^{
                 
-            }];
-            
-            [vc returnImageArray:^(NSMutableArray *result) {
+                PISPickerViewController *vc = [[PISPickerViewController alloc] init];
                 
-                self.imgArray = result;
+                [self presentViewController:vc animated:YES completion:^{
+                    
+                }];
                 
-                [_collection reloadData];
-                
-            }];
-        });
-    } else {
-        
-        // 暂时未发现像AssetsLibrary一样回调的方法在点击授权确认后继续执行
-        PHFetchOptions *allPhotosOptions = [[PHFetchOptions alloc] init];
-        allPhotosOptions.predicate = [NSPredicate predicateWithFormat:@"mediaType = %d", PHAssetMediaTypeImage];
-        allPhotosOptions.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:YES]];
-        PHFetchResult *allPhotos = [PHAsset fetchAssetsWithOptions:allPhotosOptions];
-    }
-    
+                [vc returnImageArray:^(NSMutableArray *result) {
+                    
+                    self.imgArray = result;
+                    
+                    [_collection reloadData];
+                    
+                }];
+            });
+        }
+    }];
 }
 
 
