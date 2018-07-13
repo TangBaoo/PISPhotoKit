@@ -31,7 +31,7 @@
     self.imgArray = [[NSMutableArray alloc] init];
     
     UIButton *submitButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    submitButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - 80, 70, 160, 40);
+    submitButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width / 2 - 80, 170, 160, 40);
     submitButton.backgroundColor = [UIColor grayColor];
     [submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [submitButton setTitle:@"进入相册" forState:UIControlStateNormal];
@@ -45,7 +45,7 @@
     _flowLayout.minimumInteritemSpacing = 2;
     _flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
     
-    _collection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 120, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 120) collectionViewLayout:_flowLayout];
+    _collection = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 220, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 120) collectionViewLayout:_flowLayout];
     _collection.delegate = self;
     _collection.dataSource = self;
     _collection.backgroundColor = [UIColor whiteColor];
@@ -93,6 +93,7 @@
     DemoCollectionViewCell *cell = [_collection dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
     
     cell.PhotoImage = _imgArray[indexPath.row];
+//    cell.PhotoImage = [UIImage imageWithData:_imgArray[indexPath.row]];
     
     return cell;
 }

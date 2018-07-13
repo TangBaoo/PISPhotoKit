@@ -9,6 +9,7 @@
 #import "PISImageCollectionViewCell.h"
 #import "PISImageViewController.h"
 
+
 @interface PISImageCollectionViewCell() <UIScrollViewDelegate>
 
 @property (nonatomic, strong)UIScrollView  *scrollView;
@@ -40,10 +41,19 @@
         _scrollView.userInteractionEnabled = YES;
         [self.contentView addSubview:_scrollView];
         
-        //双击手势
-        UITapGestureRecognizer *doubelGesture=[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleGesture:)];
+        // 双击手势
+        UITapGestureRecognizer *doubelGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleGesture:)];
         doubelGesture.numberOfTapsRequired = 2;
         [_scrollView addGestureRecognizer:doubelGesture];
+        
+        // 单击手势
+        UITapGestureRecognizer *oneGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(oneGesture:)];
+        oneGesture.numberOfTapsRequired = 1;
+        [_scrollView addGestureRecognizer:oneGesture];
+        
+        // 只有双击手势失败时 才识别单击手势
+        [oneGesture requireGestureRecognizerToFail:doubelGesture];
+
     }
     return _scrollView;
 }
@@ -72,7 +82,11 @@
             assetSize = CGSizeMake([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
         }
         
-        [[PHImageManager defaultManager] requestImageForAsset:_asset targetSize:assetSize contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        PHImageRequestOptions *phImageRequestOptions = [[PHImageRequestOptions alloc] init];
+        phImageRequestOptions.networkAccessAllowed = YES;
+        phImageRequestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
+        
+        [[PHImageManager defaultManager] requestImageForAsset:_asset targetSize:assetSize contentMode:PHImageContentModeAspectFit options:phImageRequestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
             
             _imgView.image = result;
             CGSize maxSize = self.scrollView.frame.size;
@@ -142,6 +156,18 @@
         return;
     }
     
+}
+
+// 单击 退出
+- (void)oneGesture:(UITapGestureRecognizer *)sender
+{
+    for (UIView * next = [self superview]; next; next = next.superview) {
+        UIResponder * nextResponder = [next nextResponder];
+        if ([nextResponder isKindOfClass:[PISImageViewController class]]) {
+            UIViewController *controller = (UIViewController *)nextResponder ;
+            [controller dismissViewControllerAnimated:YES completion:nil];
+        }
+    }
 }
 
 - (CGRect)zoomRectForScale:(float)scale withCenter:(CGPoint)center

@@ -196,26 +196,54 @@
     for (NSString *str in _tagArray) {
         NSInteger index = [str integerValue];
         PHAsset *asset = _photoList[index];
-        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-            
+        
+        PHImageRequestOptions *phImageRequestOptions = [[PHImageRequestOptions alloc] init];
+        phImageRequestOptions.networkAccessAllowed = YES;   //可自动下载icould云端的图片
+        // 是否返回原图 / 还是压缩图
+        // PHImageRequestOptionsDeliveryModeHighQualityFormat / PHImageRequestOptionsDeliveryModeOpportunistic
+        phImageRequestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
+        
+        [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(asset.pixelWidth, asset.pixelHeight) contentMode:PHImageContentModeAspectFit options:phImageRequestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+
             // 因为方法会多次调用 等原图返回才加入数组
             if ([info objectForKey:@"PHImageFileSandboxExtensionTokenKey"]) {
-                
+
                 [imgArray addObject:result];
             }
-            
+
             if (imgArray.count == _tagArray.count) {
-                
+
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.mbView removeMBView];
                     if (self.imageArrayBlock != nil) {
                         self.imageArrayBlock(imgArray);
                     }
-                    
+
                     [self dismissViewControllerAnimated:YES completion:nil];
                 });
             }
         }];
+        
+//        [[PHImageManager defaultManager] requestImageDataForAsset:asset options:phImageRequestOptions resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+//
+//            // 因为方法会多次调用 等原图返回才加入数组
+//            if ([info objectForKey:@"PHImageFileSandboxExtensionTokenKey"]) {
+//
+//                [imgArray addObject:imageData];
+//            }
+//
+//            if (imgArray.count == _tagArray.count) {
+//
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    [self.mbView removeMBView];
+//                    if (self.imageArrayBlock != nil) {
+//                        self.imageArrayBlock(imgArray);
+//                    }
+//
+//                    [self dismissViewControllerAnimated:YES completion:nil];
+//                });
+//            }
+//        }];
     }
 
 }

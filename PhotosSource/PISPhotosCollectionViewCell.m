@@ -13,6 +13,7 @@
 
 @interface PISPhotosCollectionViewCell()
 
+@property (nonatomic, strong)PHImageRequestOptions *phImageRequestOptions;
 @property (nonatomic, strong)UIImageView *imgView;
 
 @end
@@ -39,6 +40,10 @@
         [_tagButton setImage:[UIImage imageNamed:@"未选择"] forState:UIControlStateNormal];
         [_tagButton setImage:[UIImage imageNamed:@"选择"] forState:UIControlStateSelected];
         [self.contentView addSubview:_tagButton];
+        
+        self.phImageRequestOptions = [[PHImageRequestOptions alloc] init];
+        _phImageRequestOptions.networkAccessAllowed = YES;
+        _phImageRequestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
     }
     return self;
 }
@@ -48,7 +53,13 @@
     if (_asset != asset) {
         _asset = asset;
         
-        [[PHImageManager defaultManager] requestImageForAsset:_asset targetSize:IMGSIZE contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+        if (!_phImageRequestOptions) {
+            self.phImageRequestOptions = [[PHImageRequestOptions alloc] init];
+            _phImageRequestOptions.networkAccessAllowed = YES;
+            _phImageRequestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
+        }
+        
+        [[PHImageManager defaultManager] requestImageForAsset:_asset targetSize:IMGSIZE contentMode:PHImageContentModeAspectFit options:_phImageRequestOptions resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
             _imgView.image = result;
         }];
     }

@@ -7,6 +7,7 @@
 //
 
 #define TAGWIDTH (40)
+#define SELFHEIGHT ([UIApplication sharedApplication].statusBarFrame.size.height)
 
 #import "PISImageViewController.h"
 #import "PISImageCollectionViewCell.h"
@@ -38,7 +39,7 @@
     _flowLayout.minimumLineSpacing = 0;
     _flowLayout.minimumInteritemSpacing = 0;
     
-    _collection = [[UICollectionView alloc] initWithFrame:CGRectMake(-5, 64, [UIScreen mainScreen].bounds.size.width + 10, [UIScreen mainScreen].bounds.size.height - 64) collectionViewLayout:_flowLayout];
+    _collection = [[UICollectionView alloc] initWithFrame:CGRectMake(-5, 44 + SELFHEIGHT, [UIScreen mainScreen].bounds.size.width + 10, [UIScreen mainScreen].bounds.size.height - 44 - SELFHEIGHT) collectionViewLayout:_flowLayout];
     _collection.delegate = self;
     _collection.dataSource = self;
     _collection.backgroundColor = [UIColor whiteColor];
@@ -69,7 +70,7 @@
 - (void)createTagButton
 {
     _tagButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    _tagButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60, 79, TAGWIDTH, TAGWIDTH);
+    _tagButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60, 59 + SELFHEIGHT, TAGWIDTH, TAGWIDTH);
     [_tagButton setImage:[UIImage imageNamed:@"未选择"] forState:UIControlStateNormal];
     [_tagButton setImage:[UIImage imageNamed:@"选择"] forState:UIControlStateSelected];
     [_tagButton addTarget:self action:@selector(tagClick:) forControlEvents:UIControlEventTouchUpInside];

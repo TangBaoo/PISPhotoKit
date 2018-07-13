@@ -6,6 +6,8 @@
 //  Copyright © 2017年 灌汤包的大蒸笼. All rights reserved.
 //
 
+#define SELFHEIGHT ([UIApplication sharedApplication].statusBarFrame.size.height)
+
 #import "PISPVHeaderView.h"
 #import "PISPickerViewController.h"
 
@@ -24,14 +26,14 @@
     if (self = [super init]) {
         
         self.backgroundColor = [UIColor whiteColor];
-        self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 64);
+        self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 44 + SELFHEIGHT);
         self.layer.shadowColor = [UIColor lightGrayColor].CGColor;
         self.layer.shadowOffset = CGSizeMake(.5, .5);
         self.layer.shadowOpacity = .5;
         self.alpha = .95;
         
         UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        cancelButton.frame = CGRectMake(10, 30, 60, 26);
+        cancelButton.frame = CGRectMake(10, 10 + SELFHEIGHT, 60, 26);
         [cancelButton setTitle:@"取消" forState:UIControlStateNormal];
         [cancelButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         cancelButton.titleLabel.font = [UIFont systemFontOfSize:16];
@@ -40,7 +42,7 @@
         [cancelButton addTarget:self action:@selector(cancelAction) forControlEvents:UIControlEventTouchUpInside];
         
         self.submitButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _submitButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60, 30, 50, 26);
+        _submitButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60, 10 + SELFHEIGHT, 50, 26);
         [_submitButton setBackgroundColor:[UIColor whiteColor]];
         [_submitButton setTitle:@"选择" forState:UIControlStateNormal];
         [_submitButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
@@ -69,7 +71,7 @@
 - (void)setNormalButton
 {
     [_submitButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    _submitButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60, 30, 50, 26);
+    _submitButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 60, 10 + SELFHEIGHT, 50, 26);
     [_submitButton setBackgroundColor:[UIColor whiteColor]];
     _submitButton.userInteractionEnabled = NO;
 }
@@ -77,7 +79,7 @@
 - (void)setOrangeButton
 {
     [_submitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    _submitButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 80, 30, 70, 26);
+    _submitButton.frame = CGRectMake([UIScreen mainScreen].bounds.size.width - 80, 10 + SELFHEIGHT, 70, 26);
     [_submitButton setBackgroundColor:[UIColor colorWithRed:0.95 green:0.46 blue:0.04 alpha:1.00]];
     _submitButton.userInteractionEnabled = YES;
 }
