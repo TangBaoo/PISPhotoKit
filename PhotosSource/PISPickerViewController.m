@@ -73,7 +73,6 @@
         }
     }];
     
-    
     [self createHeaderView];
     
     [self createMBView];

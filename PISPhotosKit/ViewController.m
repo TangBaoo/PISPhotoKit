@@ -39,7 +39,6 @@
     [self.view addSubview:submitButton];
     [submitButton addTarget:self action:@selector(submitAction) forControlEvents:UIControlEventTouchUpInside];
 
-    
     _flowLayout = [[UICollectionViewFlowLayout alloc] init];
     _flowLayout.minimumLineSpacing = 2;
     _flowLayout.minimumInteritemSpacing = 2;
