@@ -199,7 +199,6 @@
         
         PHImageRequestOptions *phImageRequestOptions = [[PHImageRequestOptions alloc] init];
         phImageRequestOptions.networkAccessAllowed = YES;   //可自动下载icould云端的图片
-        phImageRequestOptions.synchronous = YES;  //同步返回
         // 是否返回原图 / 还是压缩图
         // PHImageRequestOptionsDeliveryModeHighQualityFormat / PHImageRequestOptionsDeliveryModeOpportunistic
         phImageRequestOptions.deliveryMode = PHImageRequestOptionsDeliveryModeOpportunistic;
