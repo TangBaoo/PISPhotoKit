@@ -70,9 +70,7 @@
                 [vc returnImageArray:^(NSMutableArray *result) {
                     
                     self.imgArray = result;
-                    
                     [_collection reloadData];
-                    
                 }];
             });
         }
