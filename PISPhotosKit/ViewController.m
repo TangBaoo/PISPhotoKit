@@ -56,6 +56,7 @@
 - (void)submitAction
 {
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+        
         if (status == PHAuthorizationStatusAuthorized) {
             //code
             dispatch_async(dispatch_get_main_queue(), ^{
